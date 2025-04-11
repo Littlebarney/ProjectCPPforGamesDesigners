@@ -27,8 +27,8 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 	class UInputMappingContext* DefaultMappingContext; 
  
 	/** Jump Input Action */ 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 
-	class UInputAction* JumpAction; 
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 
+//	class UInputAction* JumpAction; 
  
 	/** Move Input Action */ 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 

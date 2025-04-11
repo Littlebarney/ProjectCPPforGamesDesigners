@@ -49,6 +49,8 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
 	GetCharacterMovement()->JumpZVelocity = 0;
+
+	
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 0;
@@ -58,7 +60,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f; //Camera follow distance.
-	CameraBoom->bUsePawnControlRotation = true; //Rotate the arm
+	CameraBoom->bUsePawnControlRotation = false; //Rotate the arm
 
 	//Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -74,10 +76,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 		{
 			// Bind the move action to the input system
-			EnhancedInputComponent->BindAction(MoveAction, EInputEvent::IE_Pressed, this, &APlayerCharacter::Move);
+			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Move);
 
-			// Similarly, bind the Look action
-			EnhancedInputComponent->BindAction(LookAction, EInputEvent::IE_Pressed, this, &APlayerCharacter::Look);
+			// Bind the look action to the input system
+			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		}
 	}
 }
@@ -85,7 +87,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::Look(const FInputActionValue& Value)
 {
 	//input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>;
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
@@ -94,6 +96,11 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
