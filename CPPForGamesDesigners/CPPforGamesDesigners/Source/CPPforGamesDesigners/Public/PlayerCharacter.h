@@ -14,6 +14,9 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Van", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* VanMesh;
+
 	/** Camera Boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -21,6 +24,8 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 	/** Follow Camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+
 
 	/** Mapping Context */ 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 

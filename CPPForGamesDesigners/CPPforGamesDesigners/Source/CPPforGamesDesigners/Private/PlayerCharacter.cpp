@@ -6,7 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
+//#include "GameFramework/PawnMovementComponent.h"
 
 #include "InputActionValue.h"
 #include "Components/InputComponent.h"
@@ -33,42 +33,45 @@ void APlayerCharacter::BeginPlay()
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 
-	//Dont rotate when the controller rotates. Let that just affect the...
+	// Don't rotate when the controller rotates. Let that just affect the...
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; //Character will point towards the way its moving.
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character will point towards the way it's moving
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
+	// Other character movement settings
 	GetCharacterMovement()->JumpZVelocity = 0;
-
-	
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 0;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
 
-	//Create a camera boom (pulls in towards the player if there is a collision)
+	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; //Camera follow distance.
-	CameraBoom->bUsePawnControlRotation = false; //Rotate the arm
+	CameraBoom->TargetArmLength = 400.0f; // Camera follow distance
+	CameraBoom->bUsePawnControlRotation = false; // Rotate the arm
 
-	//Create a follow camera
+	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	// Create Van Mesh (if you haven’t already created it)
+	VanMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VanMesh"));
+	VanMesh->SetupAttachment(RootComponent); // Attach to RootComponent (capsule)
+	VanMesh->SetRelativeRotation(FRotator::ZeroRotator); // Set its initial rotation to match the character’s
+	VanMesh->SetUsingAbsoluteRotation(false); // Allow it to rotate with the character
 }
-
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	{
@@ -122,6 +125,18 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 		//add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y); 
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		//Vans Rotation
+		FVector Direction = (ForwardDirection * MovementVector.Y) + (RightDirection * MovementVector.X);
+		if (!Direction.IsNearlyZero())
+		{
+			FRotator NewRotation = Direction.Rotation();
+			NewRotation.Pitch = 0.f;
+			NewRotation.Roll = 0.f;
+
+			SetActorRotation(NewRotation);
+		}
+
 	}
 }
 
