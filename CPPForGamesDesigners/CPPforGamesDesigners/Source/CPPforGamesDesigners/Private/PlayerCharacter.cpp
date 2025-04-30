@@ -33,6 +33,7 @@ void APlayerCharacter::BeginPlay()
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
+	Score = 0;
 	// Set this pawn to call Tick() every frame.
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -59,18 +60,18 @@ APlayerCharacter::APlayerCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 400.0f; // Camera follow distance
-	CameraBoom->bUsePawnControlRotation = false; // Rotate the arm
+	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm
 
-	// Create a follow camera
+	//Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
 	// Create Van Mesh (if you haven’t already created it)
-	VanMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VanMesh"));
-	VanMesh->SetupAttachment(RootComponent); // Attach to RootComponent (capsule)
-	VanMesh->SetRelativeRotation(FRotator::ZeroRotator); // Set its initial rotation to match the character’s
-	VanMesh->SetUsingAbsoluteRotation(false); // Allow it to rotate with the character
+	//VanMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VanMesh"));
+	//VanMesh->SetupAttachment(RootComponent); // Attach to RootComponent (capsule)
+	//VanMesh->SetRelativeRotation(FRotator::ZeroRotator); // Set its initial rotation to match the character’s
+	//VanMesh->SetUsingAbsoluteRotation(false); // Allow it to rotate with the character
 }
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -134,12 +135,19 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 			NewRotation.Pitch = 0.f;
 			NewRotation.Roll = 0.f;
 
-			SetActorRotation(NewRotation);
+			//SetActorRotation(NewRotation);
 		}
 
 	}
+	
 }
 
+void APlayerCharacter::AddPoints(int32 Amount)
+{
+	Score += Amount;
+
+	UE_LOG(LogTemp, Log, TEXT("Player score: %d"), Score);
+}
 
 
 

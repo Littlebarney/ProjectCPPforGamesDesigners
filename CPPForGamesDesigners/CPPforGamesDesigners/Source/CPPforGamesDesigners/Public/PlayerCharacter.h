@@ -14,9 +14,6 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Van", meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* VanMesh;
-
 	/** Camera Boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -24,16 +21,12 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 	/** Follow Camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
-
-
+	
 
 	/** Mapping Context */ 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 
 	class UInputMappingContext* DefaultMappingContext; 
- 
-	/** Jump Input Action */ 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 
-//	class UInputAction* JumpAction; 
+	
  
 	/** Move Input Action */ 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 
@@ -41,12 +34,21 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
  
 	/** Look Input Action */ 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true")) 
-	class UInputAction* LookAction; 
- 
+	class UInputAction* LookAction;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
+	int32 Score;
+	
+
+
 	
 public:
 	// Sets default values for this pawn's properties
 	APlayerCharacter();
+	
+	UFUNCTION(BlueprintCallable, Category = "Score")
+	void AddPoints(int32 Amount);
+	
 
 protected:
 	// Called when the game starts or when spawned
