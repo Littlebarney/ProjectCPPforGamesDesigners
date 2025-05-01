@@ -23,7 +23,7 @@ protected:
 
 	// Points awarded when the player reaches this objective
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
-	int32 PointsToAward;
+	int32 PointsToAward = 1;
 
 	//Called when the player collides with the objective
 	UFUNCTION()

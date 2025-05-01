@@ -18,7 +18,8 @@ AObjective::AObjective()
 	CollisionComponent->SetCollisionProfileName("Trigger");
 
 	//Bind overlap event
-	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AObjective::AObjective::OnObjectiveTouched);
+	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AObjective::OnObjectiveTouched);
+
 
 	//Mesh
 	UStaticMeshComponent* VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
@@ -29,6 +30,8 @@ AObjective::AObjective()
 void AObjective::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("Objective Spawned"));
 	
 }
 
@@ -41,17 +44,23 @@ void AObjective::Tick(float DeltaTime)
 void AObjective::OnObjectiveTouched(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Objective Touched!")); 
-	
+	UE_LOG(LogTemp, Warning, TEXT("Objective overlapped with: %s"), *OtherActor->GetName());
 	if (APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor))
 	{
-		// Give points (you'll need to implement AddPoints() in your player character)
-		Player->AddPoints(PointsToAward);
+		UE_LOG(LogTemp, Warning, TEXT("Successfully cast to APlayerCharacter"));
 
-		// Optional: Visual feedback or sound
-		UE_LOG(LogTemp, Log, TEXT("Objective reached! %d points awarded."), PointsToAward);
+		if (Player->PackagesInVan > 0)
+		{
+			Player->AddPoints(PointsToAward);
+			Player->PackagesInVan--; //Decreases number of packages
+			UE_LOG(LogTemp, Log, TEXT("Package delivered! %d packages remaining."), Player->PackagesInVan);
 
-		// Destroy or deactivate objective
-		Destroy();  // You can also hide or deactivate instead
+			Destroy();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No packages to deliver!"))
+		}
 	}
 }
 

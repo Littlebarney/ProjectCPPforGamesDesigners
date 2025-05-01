@@ -39,8 +39,6 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	int32 Score;
 	
-
-
 	
 public:
 	// Sets default values for this pawn's properties
@@ -48,6 +46,14 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddPoints(int32 Amount);
+
+	UFUNCTION(BlueprintCallable, Category = "Van")
+	void PickupPackage();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Van")
+	int32 PackagesInVan;
+
+	
 	
 
 protected:
@@ -67,6 +73,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+
 
 public:
 	/** Returns CameraBoom subobject **/

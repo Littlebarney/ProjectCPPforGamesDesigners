@@ -20,6 +20,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay(); //Calls the Parent Class's Begin Play() function
 
+	
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
@@ -140,6 +141,12 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 
 	}
 	
+}
+
+void APlayerCharacter::PickupPackage()
+{
+	PackagesInVan++;
+	UE_LOG(LogTemp, Log, TEXT("Packages in Van: %d"), PackagesInVan)
 }
 
 void APlayerCharacter::AddPoints(int32 Amount)
