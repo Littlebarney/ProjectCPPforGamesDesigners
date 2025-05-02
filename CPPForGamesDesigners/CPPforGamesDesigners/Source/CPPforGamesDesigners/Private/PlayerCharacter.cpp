@@ -67,13 +67,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-
-	// Create Van Mesh (if you haven’t already created it)
-	//VanMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VanMesh"));
-	//VanMesh->SetupAttachment(RootComponent); // Attach to RootComponent (capsule)
-	//VanMesh->SetRelativeRotation(FRotator::ZeroRotator); // Set its initial rotation to match the character’s
-	//VanMesh->SetUsingAbsoluteRotation(false); // Allow it to rotate with the character
 }
+
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	{

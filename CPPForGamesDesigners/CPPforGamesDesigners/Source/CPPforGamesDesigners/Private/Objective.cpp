@@ -64,4 +64,10 @@ void AObjective::OnObjectiveTouched(UPrimitiveComponent* OverlappedComp, AActor*
 	}
 }
 
+void AObjective::InitializeObjective(int32 Points)
+{
+	PointsToAward = Points;
+}
+
+
 

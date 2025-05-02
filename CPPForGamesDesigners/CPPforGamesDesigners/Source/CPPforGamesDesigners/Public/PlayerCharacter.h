@@ -38,6 +38,8 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	int32 Score;
+
+	void CreatePackageCounterWidget();
 	
 	
 public:
@@ -53,9 +55,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Van")
 	int32 PackagesInVan;
 
-	
-	
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -66,7 +65,6 @@ protected:
 	/** Called for look input */
 	void Look(const FInputActionValue& Value);
 
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -74,6 +72,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	
 
 
 public:
