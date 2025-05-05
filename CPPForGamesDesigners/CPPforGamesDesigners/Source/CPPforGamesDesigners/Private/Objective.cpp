@@ -4,6 +4,8 @@
 #include "Objective.h"
 #include "Components/BoxComponent.h"
 #include "PlayerCharacter.h"
+#include "CPPforGamesDesigners/CPPforGamesDesignersGameMode.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AObjective::AObjective()
@@ -43,6 +45,12 @@ void AObjective::Tick(float DeltaTime)
 
 void AObjective::OnObjectiveTouched(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (ACPPforGamesDesignersGameMode* GameMode = Cast<ACPPforGamesDesignersGameMode>(UGameplayStatics::GetGameMode(this)))
+	{
+		GameMode->AddTime(10.0f);
+		UE_LOG(LogTemp, Warning, TEXT("10 Seconds Added")); 
+	}
+	
 	UE_LOG(LogTemp, Warning, TEXT("Objective Touched!")); 
 	UE_LOG(LogTemp, Warning, TEXT("Objective overlapped with: %s"), *OtherActor->GetName());
 	if (APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor))
