@@ -39,7 +39,7 @@ class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Score", meta = (AllowPrivateAccess = "true"))
 	int32 Score;
 
-	void CreatePackageCounterWidget();
+	
 	
 	
 public:
