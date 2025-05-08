@@ -88,7 +88,3 @@ int32 AObjectiveSpawner::GetSpawnedObjectiveCount() const
 	
 	return SpawnedObjectiveCount;
 }
-
-	
-
-

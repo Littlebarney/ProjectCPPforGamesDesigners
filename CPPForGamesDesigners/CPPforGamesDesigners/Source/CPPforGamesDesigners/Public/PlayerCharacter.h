@@ -5,9 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "PackageCounterWidget.h"
 #include "PlayerCharacter.generated.h"
 
 
+
+class UPackageCounterWidget;
 
 UCLASS()
 class CPPFORGAMESDESIGNERS_API APlayerCharacter : public ACharacter
@@ -64,6 +67,14 @@ protected:
 
 	/** Called for look input */
 	void Look(const FInputActionValue& Value);
+
+	//Widget
+	UPROPERTY()
+	UPackageCounterWidget* PackageCounterWidget;
+	
+	//Class of Widget
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> PackageCounterWidgetClass;
 
 public:
 	// Called every frame

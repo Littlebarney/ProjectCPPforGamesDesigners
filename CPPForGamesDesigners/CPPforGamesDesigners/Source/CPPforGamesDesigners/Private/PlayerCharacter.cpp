@@ -7,12 +7,12 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-
 #include "InputActionValue.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-
+#include "PackageCounterWidget.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
 
 
 //Called when the game starts
@@ -27,6 +27,28 @@ void APlayerCharacter::BeginPlay()
 		if(UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
+		}
+	}
+
+	//Removes existing widget if a widget already exists
+	TArray<UUserWidget*> FoundWidgets;
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(GetWorld(), FoundWidgets, PackageCounterWidgetClass, false);
+
+	for (UUserWidget* Widget : FoundWidgets)
+	{
+		if (Widget && Widget->IsInViewport())
+		{
+			Widget->RemoveFromParent();
+		}
+	}
+
+	if (PackageCounterWidgetClass)
+	{
+		PackageCounterWidget = CreateWidget<UPackageCounterWidget>(GetWorld(),PackageCounterWidgetClass);
+		if(PackageCounterWidget)
+		{
+			PackageCounterWidget->AddToViewport();
+			PackageCounterWidget->UpdatePackageCount(PackagesInVan);
 		}
 	}
 }
@@ -142,6 +164,11 @@ void APlayerCharacter::PickupPackage()
 {
 	PackagesInVan++;
 	UE_LOG(LogTemp, Log, TEXT("Packages in Van: %d"), PackagesInVan)
+
+	if(PackageCounterWidget)
+	{
+		PackageCounterWidget->UpdatePackageCount(PackagesInVan);
+	}
 }
 
 void APlayerCharacter::AddPoints(int32 Amount)
