@@ -115,8 +115,11 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	{
 		//add yaw and pitch input to controller
 
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		FRotator CurrentRotation = CameraBoom->GetRelativeRotation();
+		CurrentRotation.Yaw += LookAxisVector.X;
+		CameraBoom->SetRelativeRotation(CurrentRotation);
+		//AddControllerYawInput(LookAxisVector.X);
+		//AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
 
@@ -127,37 +130,22 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
 {
-	FVector2D MovementVector = Value.Get<FVector2D>(); 
- 
-	if (Controller != nullptr)
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (Controller != nullptr && FollowCamera)
 	{
-		//find out which way is forward 
-		const FRotator Rotation = Controller->GetControlRotation(); 
-		const FRotator YawRotation(0, Rotation.Yaw, 0); 
- 
-		//get forward Vector 
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X); 
- 
-		//get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y); 
- 
-		//add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y); 
+		// Get the camera's forward direction
+		const FRotator CameraRotation = FollowCamera->GetComponentRotation();
+		const FRotator YawRotation(0, CameraRotation.Yaw, 0);
+
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// Apply movement input
+		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
-
-		//Vans Rotation
-		FVector Direction = (ForwardDirection * MovementVector.Y) + (RightDirection * MovementVector.X);
-		if (!Direction.IsNearlyZero())
-		{
-			FRotator NewRotation = Direction.Rotation();
-			NewRotation.Pitch = 0.f;
-			NewRotation.Roll = 0.f;
-
-			//SetActorRotation(NewRotation);
-		}
-
+		
 	}
-	
 }
 
 void APlayerCharacter::PickupPackage()
