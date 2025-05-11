@@ -45,12 +45,6 @@ void AObjective::Tick(float DeltaTime)
 
 void AObjective::OnObjectiveTouched(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (ACPPforGamesDesignersGameMode* GameMode = Cast<ACPPforGamesDesignersGameMode>(UGameplayStatics::GetGameMode(this)))
-	{
-		GameMode->AddTime(10.0f);
-		UE_LOG(LogTemp, Warning, TEXT("10 Seconds Added")); 
-	}
-	
 	UE_LOG(LogTemp, Warning, TEXT("Objective Touched!")); 
 	UE_LOG(LogTemp, Warning, TEXT("Objective overlapped with: %s"), *OtherActor->GetName());
 	if (APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor))
@@ -63,6 +57,9 @@ void AObjective::OnObjectiveTouched(UPrimitiveComponent* OverlappedComp, AActor*
 			Player->PackagesInVan--; //Decreases number of packages
 			UE_LOG(LogTemp, Log, TEXT("Package delivered! %d packages remaining."), Player->PackagesInVan);
 
+			ACPPforGamesDesignersGameMode* GameMode = Cast<ACPPforGamesDesignersGameMode>(UGameplayStatics::GetGameMode(this));
+			GameMode->AddTime(20.0f);
+			
 			Destroy();
 		}
 		else
@@ -70,6 +67,7 @@ void AObjective::OnObjectiveTouched(UPrimitiveComponent* OverlappedComp, AActor*
 			UE_LOG(LogTemp, Warning, TEXT("No packages to deliver!"))
 		}
 	}
+	
 }
 
 void AObjective::InitializeObjective(int32 Points)
